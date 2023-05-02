@@ -55,40 +55,37 @@ class TestCart:
     """
 
     def test_add_product(self, cart, product):
-        assert len(cart.products) == 0
+        assert len(cart.products) == 0  # Проверка пустой корзины
         cart.add_product(product)
-        assert cart.products[product] == 1
+        assert cart.products[product] == 1  # Добавлен продукт в кол-ве 1 единицы. Ожидаем 1
         cart.add_product(product, 1)
-        assert cart.products[product] == 2
+        assert cart.products[product] == 2  # Добавлен продукт в кол-ве 1 единицы к уже существубщему товару. Ожидаем 2
 
     def test_remove_product(self, product, cart):
-        cart.add_product(product, 500)
-        cart.remove_product(product, 400)
-        assert cart.products[product] == 100
+        cart.add_product(product, 2)
+        cart.remove_product(product, 1)
+        assert cart.products[product] == 1  # Удаление продукта из корзины, ожидаем 1
         cart.remove_product(product)
-        assert len(cart.products) == 0
+        assert len(cart.products) == 0  # Проверка что корзина пуста
         cart.add_product(product, 999)
-        cart.remove_product(product, 1099)
-        assert len(cart.products) == 0
-        cart.add_product(product, 300)
-        cart.remove_product(product, 300)
-        assert len(cart.products) == 0
+        cart.remove_product(product, 1001)
+        assert len(cart.products) == 0  # remove_count больше чем товара в корзине, ожидаем удаление всей позиции
 
     def test_clear(self, cart, product):
-        cart.add_product(product, 500)
+        cart.add_product(product, 700)
         cart.clear()
         assert len(cart.products) == 0
 
     def test_get_total_price(self, cart, product):
-        cart.add_product(product, 10)
-        assert cart.get_total_price() == 1000
+        cart.add_product(product, 100)
+        assert cart.get_total_price() == 10000
 
     def test_buy_product(self, cart, product):
-        cart.add_product(product, 10)
+        cart.add_product(product, 100)
         cart.buy()
         assert len(cart.products) == 0
 
-    def test_product_buy_more_than_available(self, cart, product):
+    def test_buy_product_more(self, cart, product):
         cart.add_product(product, 1001)
         with pytest.raises(ValueError):
-            assert cart.buy()
+            assert cart.buy()  # Покупка товара в кол-ве большем, чем товаров на складе
