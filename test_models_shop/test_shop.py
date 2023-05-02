@@ -70,6 +70,9 @@ class TestCart:
         cart.add_product(product, 999)
         cart.remove_product(product, 1001)
         assert len(cart.products) == 0  # remove_count больше чем товара в корзине, ожидаем удаление всей позиции
+        cart.add_product(product, 500)
+        cart.remove_product(product, 500)
+        assert len(cart.products) == 0  #
 
     def test_clear(self, cart, product):
         cart.add_product(product, 700)
